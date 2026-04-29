@@ -1,8 +1,8 @@
 from enum import Enum
 
 class TextType(Enum):
-    PLAIN = "plain"
-    BOLD = "blod"
+    TEXT = "text"
+    BOLD = "bold"
     ITALIC = "italic"
     CODE = "code"
     LINK = "link"
