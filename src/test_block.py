@@ -1,5 +1,5 @@
 import unittest
-from blocks import markdown_to_blocks
+from blocks import markdown_to_blocks, block_to_block_type, BlockType
 
 class TestBlock(unittest.TestCase):
     def test_markdown_to_blocks(self):
@@ -51,6 +51,23 @@ This is the same paragraph on a new line
                 "1. apple\n2. banana",
             ]
         )
+
+    def test_block_type_normal(self):
+        md = "There is nothing speical in this sentence."
+        self.assertEqual(block_to_block_type(md), BlockType.PA)
+
+    def test_block_type_head(self):
+        md = "###There is nothing speical in this sentence."
+        self.assertEqual(block_to_block_type(md), BlockType.H)
+
+    def test_block_type_code(self):
+        md = """```
+for (i = 0; i < K; i++)
+{
+}
+```
+        """
+        self.assertEqual(block_to_block_type(md), BlockType.CO)
 
 
 if __name__ == "__main__":
