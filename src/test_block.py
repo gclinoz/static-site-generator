@@ -11,7 +11,7 @@ This is the same paragraph on a new line
 
 - This is a list
 - with items
-        """
+"""
         blocks = markdown_to_blocks(md)
         self.assertEqual(
             blocks,
@@ -40,8 +40,7 @@ This is the same paragraph on a new line
 1. apple
 2. banana
 
-        """
-
+"""
         blocks = markdown_to_blocks(md)
         self.assertEqual(
             blocks,
@@ -66,7 +65,7 @@ for (i = 0; i < K; i++)
 {
 }
 ```
-        """
+"""
         self.assertEqual(block_to_block_type(md), BlockType.CO)
 
     def test_paragraphs(self):
@@ -78,7 +77,6 @@ tag here
 This is another paragraph with _italic_ text and `code` here
 
 """
-
         node = markdown_to_html_node(md)
         html = node.to_html()
         self.assertEqual(
@@ -93,12 +91,55 @@ This is text that _should_ remain
 the **same** even with inline stuff
 ```
 """
-
         node = markdown_to_html_node(md)
         html = node.to_html()
         self.assertEqual(
             html,
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff</code></pre></div>",
+        )
+
+    def test_heading(self):
+        md = "###Greatest title of all time"
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><h3>Greatest title of all time</h3></div>"
+        )
+
+    def test_unorder_list(self):
+        md = """- this is a list
+- with items
+- with more items
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ul><li>this is a list</li><li>with items</li><li>with more items</li></ul></div>"
+        )
+
+    def test_list(self):
+        md = """1. this is a list
+2. with items
+3. with more items
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><ol><li>this is a list</li><li>with items</li><li>with more items</li></ol></div>"
+        )
+
+    def test_quote(self):
+        md = """> this is quote text
+the words are awesome
+"""
+        node = markdown_to_html_node(md)
+        html = node.to_html()
+        self.assertEqual(
+            html,
+            "<div><blockquote>this is quote text\nthe words are awesome</blockquote></div>"
         )
 
 if __name__ == "__main__":

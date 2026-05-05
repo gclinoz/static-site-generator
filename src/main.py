@@ -1,7 +1,7 @@
-from textnode import TextType, TextNode
+from file import sync_dir
 
 def main():
-    new = TextNode("This is some anchor text", TextType.LINK, "https://www.boot.dev")
-    print(new)
+    sync_dir("./static", "./public")
 
-main()
+if __name__ == "__main__":
+    main()

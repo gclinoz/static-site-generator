@@ -52,7 +52,7 @@ class ParentNode(HTMLNode):
             raise ValueError
         if self.children == None:
             raise ValueError("ParentNode must have children")
-        
+
         output = ''
         for n in self.children:
             output += n.to_html()
