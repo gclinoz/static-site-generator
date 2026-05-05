@@ -1,7 +1,8 @@
 from enum import Enum
 from htmlnode import LeafNode, ParentNode
 from textnode import TextNode, TextType
-from utils import text_to_textnodes, text_node_to_html_node
+from utils import text_to_textnodes, text_node_to_html_node, extract_title
+from pathlib import Path
 import re
 
 class BlockType(Enum):
@@ -92,3 +93,23 @@ def markdown_to_html_node(text):
             raise Exception("Invalid block type")
 
     return ParentNode("div", block_nodes)
+
+def generate_page(from_path, template_path, dest_path):
+    print(f"Generating page from {from_path} to {dest_path} using {template_path}")
+
+    with open(from_path, "r") as file:
+        md = file.read()
+
+    with open(template_path, "r") as file:
+        tp = file.read()
+
+    html = markdown_to_html_node(md).to_html()
+    page_title = extract_title(md)
+    final = tp.replace("{{ Title }}", page_title).replace("{{ Content }}", html)
+
+    dest = Path(dest_path)
+    if not dest.parent.exists():
+        dest.parent.mkdir()
+
+    with open(dest, "w") as f:
+        f.write(final)

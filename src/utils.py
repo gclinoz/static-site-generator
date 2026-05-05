@@ -103,3 +103,12 @@ def text_to_textnodes(text):
     nodes = split_nodes_delimiter(nodes, "_", TextType.ITALIC)
     nodes = split_nodes_delimiter(nodes, "`", TextType.CODE)
     return nodes
+
+def extract_title(text):
+    """
+    pull the h1 header from the markdown file
+    """
+    if re.match(r"#", text):
+        return text.replace("#", "").strip()
+    else:
+        raise Exception("Title not found")

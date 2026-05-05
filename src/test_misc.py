@@ -6,7 +6,8 @@ from utils import (
     extract_markdown_links,
     split_nodes_image,
     split_nodes_link,
-    text_to_textnodes
+    text_to_textnodes,
+    extract_title
 )
 
 class TestNodeSplit(unittest.TestCase):
@@ -101,6 +102,12 @@ class TestNodeSplit(unittest.TestCase):
             ],
             nodes,
         )
+
+    def test_extract_markdown_title(self):
+        matches = extract_title(
+            "# this is test title  "
+        )
+        self.assertEqual("this is test title", matches)
 
 if __name__ == "__main__":
     unittest.main()
