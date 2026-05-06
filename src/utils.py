@@ -109,6 +109,6 @@ def extract_title(text):
     pull the h1 header from the markdown file
     """
     if re.match(r"#", text):
-        return text.replace("#", "").strip()
+        return re.findall("#.*", text)[0].replace("#", "").strip()
     else:
         raise Exception("Title not found")
