@@ -109,7 +109,16 @@ def generate_page(from_path, template_path, dest_path):
 
     dest = Path(dest_path)
     if not dest.parent.exists():
-        dest.parent.mkdir()
+        dest.parent.mkdir(parents=True)
 
     with open(dest, "w") as f:
         f.write(final)
+
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+    src = Path(dir_path_content)
+    dest = Path(dest_dir_path)
+
+    md_list = list(src.rglob("*.md"))
+    for md in md_list:
+        new_dest = str(md).replace(src.name, dest.name).replace("md", "html")
+        generate_page(md, template_path, new_dest)
