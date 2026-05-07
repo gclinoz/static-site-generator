@@ -94,7 +94,7 @@ def markdown_to_html_node(text):
 
     return ParentNode("div", block_nodes)
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
     with open(from_path, "r") as file:
@@ -105,7 +105,16 @@ def generate_page(from_path, template_path, dest_path):
 
     html = markdown_to_html_node(md).to_html()
     page_title = extract_title(md)
-    final = tp.replace("{{ Title }}", page_title).replace("{{ Content }}", html)
+    
+    REPLACEMENTS = [
+        ('{{ Title }}', page_title),
+        ('{{ Content }}', html),
+        ('href="/', f'href="{basepath}'),
+        ('src="/', f'src="{basepath}')
+    ]
+    final = tp
+    for old, new in REPLACEMENTS:
+        final = final.replace(old, new)
 
     dest = Path(dest_path)
     if not dest.parent.exists():
@@ -114,11 +123,11 @@ def generate_page(from_path, template_path, dest_path):
     with open(dest, "w") as f:
         f.write(final)
 
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     src = Path(dir_path_content)
     dest = Path(dest_dir_path)
 
     md_list = list(src.rglob("*.md"))
     for md in md_list:
         new_dest = str(md).replace(src.name, dest.name).replace("md", "html")
-        generate_page(md, template_path, new_dest)
+        generate_page(md, template_path, new_dest, basepath)
